@@ -25,7 +25,7 @@ class News {
         title = json['title'] ?? '',
         description = json['description'] ?? '',
         url = json['url'] ?? '',
-        urlToImage = json['urlToImage'] ?? '',
+        urlToImage = json['urlToImage'] ?? 'https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png',
         publishedAt = json['publishedAt'] ?? '',
         content = json['content'] ?? '';
 }
