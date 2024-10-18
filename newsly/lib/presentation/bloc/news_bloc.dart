@@ -1,0 +1,21 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:newsly/data/remote/news_service.dart';
+import 'package:newsly/domain/news.dart';
+import 'package:newsly/presentation/bloc/news_event.dart';
+import 'package:newsly/presentation/bloc/news_state.dart';
+
+class NewsBloc extends Bloc<NewsEvent, NewsState> {
+  NewsBloc() : super(NewsInitialState()) {
+    on<SearchNews>(
+      (event, emit) async {
+        emit(NewsLoadingState());
+        try {
+          List<News> news = await NewsService().getNews(event.query);
+          emit(NewsLoadedState(news: news));
+        } catch (e) {
+          emit(NewsErrorState(message: e.toString()));
+        }
+      },
+    );
+  }
+}

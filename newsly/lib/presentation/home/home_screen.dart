@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:newsly/presentation/home/favorite_news/favorite_news_page.dart';
-import 'package:newsly/presentation/search_news/search_news_page.dart';
+import 'package:newsly/presentation/home/search_news/search_news_page.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

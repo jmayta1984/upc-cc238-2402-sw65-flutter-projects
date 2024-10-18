@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:newsly/domain/news.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NewsDetailsScreen extends StatefulWidget {
   const NewsDetailsScreen({super.key, required this.news});
@@ -61,7 +62,10 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconButton.outlined(
-                    onPressed: () {}, icon: const Icon(Icons.web)),
+                    onPressed: () {
+                      _openNewsUrl();
+                    },
+                    icon: const Icon(Icons.web)),
                 IconButton.outlined(
                     onPressed: () {
                       setState(() {
@@ -80,5 +84,12 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
         ),
       ),
     );
+  }
+
+  void _openNewsUrl() async {
+    Uri uri = Uri.parse(widget.news.url);
+    if (!await launchUrl(uri)) {
+      throw Exception('Could not launch $uri');
+    }
   }
 }

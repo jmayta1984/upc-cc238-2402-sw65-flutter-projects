@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:newsly/domain/news.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:newsly/presentation/bloc/news_bloc.dart';
+import 'package:newsly/presentation/bloc/news_event.dart';
+import 'package:newsly/presentation/bloc/news_state.dart';
 import 'package:newsly/presentation/news_detail/news_details_screen.dart';
 
 class SearchNewsPage extends StatefulWidget {
@@ -11,19 +14,10 @@ class SearchNewsPage extends StatefulWidget {
 
 class _SearchNewsPageState extends State<SearchNewsPage> {
   final TextEditingController _controller = TextEditingController();
-  List<News> _news = [];
 
   @override
   void initState() {
     super.initState();
-    loadData();
-  }
-
-  loadData() async {
-    List maps = await loadJsonFromAssets('assets/articles.json');
-    setState(() {
-      _news = maps.map((map) => News.fromJson(map)).toList();
-    });
   }
 
   @override
@@ -33,6 +27,9 @@ class _SearchNewsPageState extends State<SearchNewsPage> {
         Padding(
           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
           child: TextField(
+            onSubmitted: (value) {
+              context.read<NewsBloc>().add(SearchNews(query: value));
+            },
             controller: _controller,
             decoration: InputDecoration(
                 hintText: 'Search news',
@@ -41,61 +38,76 @@ class _SearchNewsPageState extends State<SearchNewsPage> {
                     borderRadius: BorderRadius.circular(16))),
           ),
         ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: _news.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              NewsDetailsScreen(news: _news[index]),
-                        ));
-                  },
-                  child: Card(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Hero(
-                            tag: _news[index].title,
-                            child: Image.network(
-                              _news[index].urlToImage,
-                              width: double.infinity,
-                              height: 150,
-                              fit: BoxFit.cover,
+        BlocBuilder<NewsBloc, NewsState>(
+          builder: (context, state) {
+            if (state is NewsLoadingState) {
+              return const CircularProgressIndicator();
+            } else {
+              if (state is NewsLoadedState) {
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: state.news.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => NewsDetailsScreen(
+                                      news: state.news[index]),
+                                ));
+                          },
+                          child: Card(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Hero(
+                                    tag: state.news[index].title,
+                                    child: Image.network(
+                                      state.news[index].urlToImage,
+                                      width: double.infinity,
+                                      height: 150,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 8.0, right: 8.0),
+                                  child: Text(
+                                    state.news[index].title,
+                                    maxLines: 1,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 8.0, right: 8.0),
+                                  child: Text(state.news[index].author),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(state.news[index].description,
+                                      maxLines: 3),
+                                )
+                              ],
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                          child: Text(
-                            _news[index].title,
-                            maxLines: 1,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                          child: Text(_news[index].author),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(_news[index].description, maxLines: 3),
-                        )
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                ),
-              );
-            },
-          ),
+                );
+              }
+            }
+            return const Text('Search news');
+          },
         )
       ],
     );
