@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:newsly/home_screen.dart';
+import 'package:newsly/presentation/home/home_screen.dart';
 
 void main() {
   runApp(const MainApp());
