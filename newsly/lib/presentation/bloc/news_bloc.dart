@@ -6,11 +6,11 @@ import 'package:newsly/presentation/bloc/news_state.dart';
 
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
   NewsBloc() : super(NewsInitialState()) {
-    on<SearchNews>(
+    on<SearchNewsEvent>(
       (event, emit) async {
         emit(NewsLoadingState());
         try {
-          List<News> news = await NewsService().getNews(event.query);
+          List<News> news = await NewsService().searchNews(event.query);
           emit(NewsLoadedState(news: news));
         } catch (e) {
           emit(NewsErrorState(message: e.toString()));

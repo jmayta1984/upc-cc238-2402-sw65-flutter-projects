@@ -7,11 +7,12 @@ class NewsInitialState extends NewsState {}
 class NewsLoadingState extends NewsState {}
 
 class NewsLoadedState extends NewsState {
-  List<News> news;
+  final List<News> news;
   NewsLoadedState({required this.news});
 }
 
 class NewsErrorState extends NewsState {
-  String message;
+  final String message;
   NewsErrorState({required this.message});
+  
 }

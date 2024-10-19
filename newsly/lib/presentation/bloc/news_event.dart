@@ -1,6 +1,8 @@
 abstract class NewsEvent {}
 
-class SearchNews extends NewsEvent {
-  String query;
-  SearchNews({required this.query});
+class SearchNewsEvent extends NewsEvent {
+  final String query;
+
+  SearchNewsEvent({required this.query});
+  
 }
