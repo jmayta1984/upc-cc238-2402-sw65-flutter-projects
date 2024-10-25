@@ -5,7 +5,7 @@ import 'package:newsly/features/news/presentation/blocs/news_state.dart';
 import 'package:newsly/shared/domain/entities/news.dart';
 
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
-  NewsBloc() : super(NewsInitialState()) {
+  NewsBloc() : super(NewsInitalState()) {
     on<SearchNews>(
       (event, emit) async {
         emit(NewsLoadingState());
