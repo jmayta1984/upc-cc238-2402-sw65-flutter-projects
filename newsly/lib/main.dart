@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:newsly/features/news/presentation/blocs/news_bloc.dart';
+import 'package:newsly/features/news/presentation/blocs/news/news_bloc.dart';
 import 'package:newsly/shared/presentation/pages/home_page.dart';
 
 

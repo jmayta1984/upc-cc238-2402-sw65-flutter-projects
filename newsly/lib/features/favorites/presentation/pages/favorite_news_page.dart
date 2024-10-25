@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:newsly/core/utils/utils.dart';
-import 'package:newsly/shared/domain/entities/news.dart';
+import 'package:newsly/shared/data/local/app_database.dart';
+import 'package:newsly/shared/data/local/favorite_news_dao.dart';
+import 'package:newsly/shared/data/local/favorite_news_model.dart';
 
 class FavoriteNewsPage extends StatefulWidget {
   const FavoriteNewsPage({super.key});
@@ -11,20 +12,21 @@ class FavoriteNewsPage extends StatefulWidget {
 
 class _FavoriteNewsPageState extends State<FavoriteNewsPage> {
   final TextEditingController _controller = TextEditingController();
-  List<News> _news = [];
-  List<News> _favoriteNews = [];
+  List<FavoriteNewsModel> _news = [];
+  List<FavoriteNewsModel> _favoriteNews = [];
+
+  Future<void> loadData() async {
+    List<FavoriteNewsModel> favorites = await FavoriteNewsDao(appDatabase: AppDatabase()).fetchAllFavoriteNews();
+    setState(() {
+      _news = favorites;
+      _favoriteNews = favorites;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    loadData().then(
-      (news) {
-        setState(() {
-          _news = news;
-          _favoriteNews = news;
-        });
-      },
-    );
+    loadData();
   }
 
   @override
@@ -57,7 +59,7 @@ class _FavoriteNewsPageState extends State<FavoriteNewsPage> {
                     Hero(
                       tag: _favoriteNews[index].title,
                       child: Image.network(
-                        _news[index].urlToImage,
+                        _news[index].image,
                         errorBuilder: (context, error, stackTrace) {
                           return const SizedBox(
                             height: 150,

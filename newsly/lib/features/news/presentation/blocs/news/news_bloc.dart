@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsly/features/news/data/remote/news_service.dart';
-import 'package:newsly/features/news/presentation/blocs/news_event.dart';
-import 'package:newsly/features/news/presentation/blocs/news_state.dart';
+import 'package:newsly/features/news/presentation/blocs/news/news_event.dart';
+import 'package:newsly/features/news/presentation/blocs/news/news_state.dart';
 import 'package:newsly/shared/domain/entities/news.dart';
 
 class NewsBloc extends Bloc<NewsEvent, NewsState> {

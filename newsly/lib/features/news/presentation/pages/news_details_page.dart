@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:newsly/shared/data/local/app_database.dart';
+import 'package:newsly/shared/data/local/favorite_news_dao.dart';
+import 'package:newsly/shared/data/local/favorite_news_model.dart';
 import 'package:newsly/shared/domain/entities/news.dart';
 
 class NewsDetailsPage extends StatefulWidget {
@@ -58,6 +61,14 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                       setState(() {
                         _isFavorite = !_isFavorite;
                       });
+                      _isFavorite
+                          ? FavoriteNewsDao(appDatabase: AppDatabase())
+                              .insertFavoriteNews(FavoriteNewsModel(
+                                  title: widget.news.title,
+                                  image: widget.news.urlToImage,
+                                  author: widget.news.author))
+                          : FavoriteNewsDao(appDatabase: AppDatabase())
+                              .deleteFavoriteNews(widget.news.title);
                     },
                     icon: const Icon(Icons.favorite),
                     color: _isFavorite
