@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rick_and_morty/features/characters/presentation/pages/character_list_page.dart';
-import 'package:rick_and_morty/features/favorites/presentation/favorite_list_page.dart';
+import 'package:rick_and_morty/features/favorites/presentation/pages/favorite_list_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
