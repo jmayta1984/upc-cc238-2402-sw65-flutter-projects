@@ -19,7 +19,7 @@ class MovieSection extends StatelessWidget {
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 30),
                 ),
-                SizedBox(height: 275, child: MovieList(path: section.path))
+                SizedBox(height: 300, child: MovieList(path: section.path))
               ],
             )));
   }
