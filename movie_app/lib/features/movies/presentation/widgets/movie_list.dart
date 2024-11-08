@@ -5,6 +5,7 @@ import 'package:movie_app/core/resouce.dart';
 import 'package:movie_app/features/movies/data/remote/movie_service.dart';
 import 'package:movie_app/features/movies/data/repository/movie_repository.dart';
 import 'package:movie_app/features/movies/domain/movie.dart';
+import 'package:movie_app/features/movies/presentation/pages/movie_detail_page.dart';
 import 'package:movie_app/features/movies/presentation/widgets/movie_list_item.dart';
 
 class MovieList extends StatefulWidget {
@@ -51,7 +52,11 @@ class _MovieListState extends State<MovieList> {
       pagingController: _pagingController,
       scrollDirection: Axis.horizontal,
       builderDelegate: PagedChildBuilderDelegate(
-        itemBuilder: (context, item, index) => MovieListItem(movie: item),
+        itemBuilder: (context, item, index) => GestureDetector(
+          onTap: () {
+            Navigator.push(context,MaterialPageRoute(builder:(context) => MovieDetailPage(movie: item),));
+          },
+          child: MovieListItem(movie: item)),
       ),
     );
   }
