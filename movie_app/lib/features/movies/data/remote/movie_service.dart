@@ -21,7 +21,7 @@ class MovieService {
 
         return Success(results.map((json) => MovieDto.fromJson(json)).toList());
       }
-      return Error('Error: no response');
+      return Error('Error: ${response.statusCode}');
     } catch (error) {
       return Error('Error: ${error.toString()}');
     }

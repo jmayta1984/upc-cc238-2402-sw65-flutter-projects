@@ -15,7 +15,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: BlocListener<LoginBloc, LoginState>(
+        child: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
             if (state is LoginSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -37,47 +37,54 @@ class LoginPage extends StatelessWidget {
               );
             }
           },
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  controller: _usernameController,
-                  decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.person),
-                      border: OutlineInputBorder(),
-                      label: Text('Username')),
-                ),
+          builder: (context, state) {
+            return Stack(children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: _usernameController,
+                      decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.person),
+                          border: OutlineInputBorder(),
+                          label: Text('Username')),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.lock),
+                          suffixIcon: IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.visibility)),
+                          border: const OutlineInputBorder(),
+                          label: const Text('Password')),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton(
+                          onPressed: () {
+                            final String username = _usernameController.text;
+                            final String password = _passwordController.text;
+                            context.read<LoginBloc>().add(LoginSubmitted(
+                                username: username, password: password));
+                          },
+                          child: const Text('Login')),
+                    ),
+                  )
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.lock),
-                      suffixIcon: IconButton(
-                          onPressed: () {}, icon: const Icon(Icons.visibility)),
-                      border: const OutlineInputBorder(),
-                      label: const Text('Password')),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton(
-                      onPressed: () {
-                        final String username = _usernameController.text;
-                        final String password = _passwordController.text;
-                        context.read<LoginBloc>().add(LoginSubmitted(
-                            username: username, password: password));
-                      },
-                      child: const Text('Login')),
-                ),
-              )
-            ],
-          ),
+              if (state is LoginLoading)
+                const Center(child: CircularProgressIndicator())
+            ]);
+          },
         ),
       ),
     );

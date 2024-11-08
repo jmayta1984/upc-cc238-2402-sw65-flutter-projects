@@ -7,10 +7,15 @@ class MovieRepository {
   MovieRepository({required this.movieService});
   final MovieService movieService;
 
-  Future<List<Movie>> getMovies(String path, int page) async { 
-     final Resource<List<MovieDto>> resource= await movieService.getMovies(path, page);
+  Future<Resource<List<Movie>>> getMovies(String path, int page) async {
+    final Resource<List<MovieDto>> result =
+        await movieService.getMovies(path, page);
+    if (result is Success) {
+      List<MovieDto> moviesDto = result.data!;
 
-    //return moviesDto.map((movieDto) => movieDto.toMovie()).toList();
-    return [];
+      return Success(moviesDto.map((movieDto) => movieDto.toMovie()).toList());
+    }
+
+    return Error(result.message!);
   }
 }
