@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meals_app/features/meals/data/remote/meal_service.dart';
 import 'package:meals_app/features/meals/domain/category.dart';
 import 'package:meals_app/features/meals/domain/meal.dart';
+import 'package:meals_app/features/meals/presentation/widgets/meal_list.dart';
 
 class CategoryDetailPage extends StatefulWidget {
   const CategoryDetailPage({super.key, required this.category});
@@ -35,25 +36,32 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
       body: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
                 SliverAppBar(
-                  expandedHeight: 100,
+                  pinned: true,
+                  expandedHeight: 200,
                   flexibleSpace: FlexibleSpaceBar(
-                    title: Text(category.name),
                     background: Image.network(
                       category.image,
                       width: double.infinity,
-                      height: 400,
+                      height: 200,
                       fit: BoxFit.cover,
                     ),
                   ),
                 )
               ],
-          body: ListView.builder(
-            itemCount: _meals.length,
-            itemBuilder: (context, index) => Card(
-              child: ListTile(
-                leading: Image.network(_meals[index].image),
-                title: Text(_meals[index].name),
-              ),
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  category.name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                  ),
+                ),
+                Text(category.description),
+                MealList(meals: _meals)
+              ],
             ),
           )),
     );
