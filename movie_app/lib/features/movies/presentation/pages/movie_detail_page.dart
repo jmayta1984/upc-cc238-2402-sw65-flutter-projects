@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:movie_app/features/movies/domain/movie.dart';
 
 class MovieDetailPage extends StatelessWidget {
@@ -29,7 +28,7 @@ class MovieDetailPage extends StatelessWidget {
           },
           body: SingleChildScrollView(
             child: Column(
-              children: [Text(movie.title), Icon(Icons.bookmark_border)],
+              children: [Text(movie.title), const Icon(Icons.bookmark_border)],
             ),
           )),
     );
